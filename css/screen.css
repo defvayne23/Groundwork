@@ -1,0 +1,504 @@
+/* @group reset */
+
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+  margin:0;
+  padding:0;
+  border:0;
+  outline:0;
+  font-size:100%;
+  vertical-align:baseline;
+  background:transparent;
+}                  
+
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section { 
+    display:block;
+}
+
+nav ul { list-style:none; }
+
+blockquote, q { quotes:none; }
+
+blockquote:before, blockquote:after,
+q:before, q:after { content:''; content:none; }
+
+a { margin:0; padding:0; font-size:100%; vertical-align:baseline; background:transparent; }
+
+ins { background-color:#ff9; color:#000; text-decoration:none; }
+
+mark { background-color:#ff9; color:#000; font-style:italic; font-weight:bold; }
+
+del { text-decoration: line-through; }
+
+abbr[title], dfn[title] { border-bottom:1px dotted; cursor:help; }
+
+/* tables still need cellspacing="0" in the markup */
+table { border-collapse:collapse; border-spacing:0; }
+
+hr { display:block; height:1px; border:0; border-top:1px solid #ccc; margin:1em 0; padding:0; }
+
+input, select { vertical-align:middle; }
+
+/* @end */
+
+/* @group structure */
+
+html, body {
+	background: #fff url(../images/12_col.gif) repeat-y fixed top center;
+}
+
+body {
+	font: 62.5% "Arial", Verdana, sans-serif;
+	color: #333;
+	text-align: center;
+}
+
+header, article, section, aside, footer {
+	display: block;
+}
+
+#wrapper {
+	width: 960px;
+	margin: 0 auto;
+	padding: 0;
+	text-align: left;
+	overflow: hidden;
+}
+
+/* @end */
+
+/* @group header */
+
+header {
+	width: 100%;
+	height: px;
+	margin: 35px 0;
+}
+
+header h1 a:link, header h1 a:active, header h1 a:visited {
+	font-size: 4.0em;
+	color: #;
+	text-decoration: none;
+}
+
+header h1 a:focus {
+	outline: thin dotted;
+}
+
+header h1 a:hover {
+	color: #;
+	text-decoration: underline;
+}
+
+/* @group nav */
+
+nav {
+	overflow: hidden;
+}
+
+nav ul {
+	float: left;
+	width: 100%;
+	margin-bottom: px;
+}
+
+nav ul li {
+	display: inline;
+}
+
+nav ul li a:link, nav ul li a:visited, nav ul li a:active {
+	float: left;
+	display: block;
+	margin-left: px;
+	padding: px;
+	color: #;
+	background: #;
+	text-decoration: none;
+}
+
+nav ul li:first-child a {
+	margin-left: 0;
+}
+
+nav ul li a:focus {
+	outline: thin dotted;
+}
+
+nav ul li a:hover {
+	color: #;
+	text-decoration: underline;
+}
+
+/* @end */
+
+/* @end */
+
+/* @group content */
+
+#content {
+	float: left;
+	display: inline;
+	width: 620px;
+	color: #;
+	margin-left: 10px;
+}
+
+.content a:link, .content a:visited, .content a:active {
+	color: #;
+	text-decoration: none;
+}
+
+.content a:focus {
+	outline: thin dotted;
+}
+
+.content a:hover {
+	color: #;
+	text-decoration: underline;
+}
+
+.content h2 {
+	margin: 0 0 15px;
+	font-size: 3.5em;
+	color: #;
+}
+
+.content h3 {
+	margin: 25px 0 15px;
+	font-size: 3.0em;
+	font-weight: bold;
+	color: #;
+}
+
+.content h4 {
+	margin: 25px 0 15px;
+	font-size: 2.6em;
+	font-weight: bold;
+	color: #;
+}
+
+.content h5 {
+	margin: 25px 0 15px;
+	font-size: 2.1em;
+	font-weight: bold;
+	color: #;
+}
+
+.content h6 {
+	margin: 25px 0 15px;
+	font-size: 1.7em;
+	font-weight: bold;
+	color: #;
+}
+
+.content p, .content blockquote {
+	margin-bottom: 20px;
+	font-size: 1.3em;
+	line-height: 1.4em;
+}
+
+.content p a:link, .content p a:visited, .content p a:active, .content li a:link, .content li a:visited, .content li a:active {
+	color: #;
+	text-decoration: none;
+	border-bottom: 1px solid #;
+}
+
+.content p a:hover, .content li a:hover {
+	color: #;
+	border-bottom: 1px solid #;
+}
+
+.content ul {
+	margin: 0 0 15px 30px;
+}
+
+.content ul li {
+	list-style-type: square;
+}
+
+.content ol {
+	margin: 0 0 15px 30px;
+	list-style-type: decimal;
+}
+
+.content ol li {
+	list-style-type: decimal;
+}
+
+.content li {
+	margin-bottom: 5px;
+	font-size: 1.3em;
+	line-height: 1.4em;
+}
+
+.content li li {
+	font-size: 1em;
+}
+
+/* @end */
+
+/* @group sidebar */
+
+aside {
+	float: right;
+	display: inline;
+	width: 300px;
+	font-size: .95em;
+	color: #;
+	margin-right: 10px;
+}
+
+aside a:link, aside a:visited, aside a:active {
+	color: #;
+	text-decoration: none;
+	border-bottom: 1px solid #;
+}
+
+aside a:focus {
+	outline: thin dotted;
+}
+
+aside a:hover {
+	color: #;
+	border-bottom: 1px solid #;
+}
+
+aside h2 {
+	margin-bottom: 1em;
+	font-size: 1.8em;
+	color: #;
+}
+
+aside h3 {
+	margin-bottom: 1em;
+	font-size: 1.5em;
+	font-weight: bold;
+	color: #;
+}
+
+aside h4 {
+	margin-bottom: 1em;
+	font-size: 1.4em;
+	font-weight: bold;
+	color: #;
+}
+
+aside h5 {
+	margin-bottom: 1em;
+	font-size: 1.3em;
+	font-weight: bold;
+	color: #;
+}
+
+aside h6 {
+	margin-bottom: 1em;
+	font-size: 1.2em;
+	font-weight: bold;
+	color: #;
+}
+
+aside p, aside blockquote {
+	margin-bottom: 1.8em;
+	font-size: 1.3em;
+	line-height: 1.4em;
+}
+
+aside p a:link, aside p a:visited, aside p a:active, aside li a:link, aside li a:visited, aside li a:active {
+	color: #;
+	text-decoration: none;
+	border-bottom: 1px solid #;
+}
+
+aside p a:hover, aside li a:hover {
+	color: #;
+	border-bottom: 1px solid #;
+}
+
+aside ul {
+	margin: 0 0 15px 30px;
+}
+
+aside ul li {
+	list-style-type: square;
+}
+
+aside ol {
+	margin: 0 0 15px 30px;
+	list-style-type: decimal;
+}
+
+aside ol li {
+	list-style-type: decimal;
+}
+
+aside li {
+	margin-bottom: 5px;
+	font-size: 1.3em;
+	line-height: 1.4em;
+}
+
+/* @end */
+
+/* @group forms */
+
+label, input[type=button], input[type=submit], button {
+	cursor: pointer;
+}
+
+input[type="radio"] {
+	vertical-align: text-bottom;
+}
+
+input[type="checkbox"] {
+	vertical-align: bottom;
+}
+
+.ie7 input[type="checkbox"] {
+	vertical-align: baseline;
+}
+
+/* @end */
+
+/* @group footer */
+
+footer {
+	clear: both;
+	float: left;
+	display: inline;
+	margin: 25px 10px;
+}
+
+footer p {
+	color: #666;
+}
+
+footer a:link, footer a:visited, footer a:active {
+	color: #;
+	text-decoration: none;
+}
+
+footer a:focus {
+	outline: thin dotted;
+}
+
+footer a:hover {
+	color: #;
+	text-decoration: underline;
+}
+
+/* @end */
+
+/* @group misc */
+
+.clear {
+	clear: both;
+	margin: 0;
+	padding: 0;
+	height: 0;
+}
+
+/* Hide from browsers */
+.hide {
+	display: none;
+}
+
+/* Hide from browsers & screenreaders */
+.hidden {
+	display: none;
+	visibility: hidden;
+}
+
+/* Hide from browsers, available to screenreaders */
+.visuallyHidden {
+	position: absolute !important;
+	clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+	clip: rect(1px, 1px, 1px, 1px);
+}
+
+/* Hide from browsers & screenreaders, maintain layout */
+.invisible { 
+	visibility: hidden;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+pre, code, kbd, samp {
+	font-family: monospace, sans-serif;
+}
+
+strong, th {
+	font-weight: bold;
+}
+
+pre { 
+  padding: 15px; 
+  white-space: pre; /* CSS2 */
+  white-space: pre-wrap; /* CSS 2.1 */
+  white-space: pre-line; /* CSS 3 (and 2.1 as well, actually) */
+  word-wrap: break-word; /* IE */
+}
+
+::-moz-selection {
+	background: #62aaf2;
+	color:#fff;
+	text-shadow: none;
+}
+
+::selection {
+	background:#62aaf2;
+	color:#fff;
+	text-shadow: none;
+} 
+
+/* @end */
+
+@media all and (orientation:portrait) {
+
+}
+
+@media all and (orientation:landscape) {
+
+}
+
+@media screen and (max-device-width: 480px) {
+	a:link {
+		-webkit-tap-highlight-color: #;
+	} 
+	
+	/* Prevent iOS, WinMobile from adjusting font size */
+	html {
+		-webkit-text-size-adjust: none;
+		-ms-text-size-adjust: none;
+	}
+}
+
+@media print {
+	* {background: transparent !important; color: #444 !important; text-shadow: none !important;}
+  a, a:visited {color: #444 !important; text-decoration: underline;}
+  a:after {content: " (" attr(href) ")";} 
+  abbr:after {content: " (" attr(title) ")";}
+  .ir a:after {content: "";}  /* Don't show links for images */
+  pre, blockquote {border: 1px solid #999; page-break-inside: avoid;}
+  thead {display: table-header-group;} /* css-discuss.incutio.com/wiki/Printing_Tables */ 
+  tr, img {page-break-inside: avoid;}
+  @page {margin: 0.5cm;}
+  p, h2, h3 {orphans: 3; widows: 3;}
+  h2, h3{page-break-after: avoid;}
+}

@@ -1,0 +1,37 @@
+Options -MultiViews 
+
+# Force the latest IE version, in various cases when it may fall back to IE7 mode
+#  github.com/rails/rails/commit/123eb25#commitcomment-118920
+# Use ChromeFrame if it's installed for a better experience for the poor IE folk
+<IfModule mod_setenvif.c>
+	<IfModule mod_headers.c>
+		BrowserMatch MSIE ie
+		Header set X-UA-Compatible "IE=Edge" env=ie
+		BrowserMatch chromeframe gcf
+		Header append X-UA-Compatible "chrome=1" env=gcf
+	</IfModule>
+</IfModule>
+
+# video
+AddType video/ogg ogg ogv
+AddType video/mp4 mp4
+
+# Proper svg serving. Required for svg webfonts on iPad
+#   twitter.com/FontSquirrel/status/14855840545
+AddType image/svg+xml                 svg svgz 
+
+# webfonts
+AddType application/vnd.ms-fontobject eot
+AddType font/ttf                      ttf
+AddType font/otf                      otf
+AddType font/x-woff                   woff
+
+RewriteEngine On
+RewriteBase /
+
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+
+# Pass everything else to the app
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^.*$ index.php
