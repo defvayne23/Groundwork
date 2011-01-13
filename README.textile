@@ -1,0 +1,21 @@
+h1. Groundwork
+
+PHP MVC framework created to start most web apps. Contains all the most basic functionality to begin coding. Used when a CMS is not the right route for your project.
+
+* No database required.
+
+* No prior controllers or models.
+
+* No admin.
+
+h2. Requirements/Installing
+
+The requirements are simple. Apache 2+ and PHP 5+.
+
+* Keeping the directory structure upload the files to your server.
+
+* Edit app/config.php to set the database location and basic settings.
+
+h2. Developers
+
+John Hoover, "http://defvayne23.com":http://defvayne23.com
