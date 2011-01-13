@@ -1,5 +1,7 @@
 <?php
 class appController {
+	private $viewData;
+	
 	public $root;
 	public $controller;
 	public $action;
@@ -50,9 +52,17 @@ class appController {
 	
 	public function loadView($sTemplate) {
 		if(is_file($this->root."app/views/".$sTemplate)) {
+			foreach($this->viewData as $sName => $sValue) {
+				$$sName = $sValue;
+			}
+			
 			include($this->root."app/views/".$sTemplate);
 		} else {
 			return false;
 		}
+	}
+	
+	public function assign($sName, $sValue) {
+		$this->viewData[$sName] = $sValue;
 	}
 }
