@@ -15,7 +15,7 @@ class db {
 		$this->dbh = @mysql_connect($dbhost,$dbuser,$dbpassword);
 		
 		if(!$this->dbh) {
-			$this->printError(
+			$this->_printError(
 				"<ol>\n"
 					."<b>Error establishing a database connection!</b>\n"
 					."<li>Are you sure you have the correct user/password?</li>\n"
@@ -33,7 +33,7 @@ class db {
 	//Select a DB (if another one needs to be selected)
 	public function changeDatabase($sDatabase) {
 		if(!@mysql_select_db($sDatabase, $this->dbh)) {
-			$this->printError(
+			$this->_printError(
 				"<ol>\n"
 					."<b>Error selecting database <u>".$sDatabase."</u>!</b>\n"
 					."<li>Are you sure it exists?</li>\n"
@@ -72,7 +72,7 @@ class db {
 		
 			if(mysql_error()) {
 				// If there is an error then take note of it..
-				$this->printError();
+				$this->_printError();
 			} else {
 				// In other words if this was a select statement..
 				if($this->result) {
@@ -265,20 +265,6 @@ class db {
 		$this->free();
 		@mysql_close($this->dbh);
 	}
-	
-	// ==================================================================
-	//Print SQL/DB error.
-	public function printError($sError = "") {
-		if(empty($sError)) {
-			$sError = mysql_error();
-		}
-		
-		// If there is an error then take note of it
-		print "<div style=\"font-family: Arial;font-size: 14px;color: #000000\">\n";
-		print "\t<span style=\"color: #ff0000\">SQL/DB Error</span>\n<br>";
-		print "\t".$sError."\n";
-		print "</div>";	
-	}
 
 	// ==================================================================
 	// Dumps the contents of any input variable to screen in a nicely
@@ -361,6 +347,20 @@ class db {
 		}
 		echo "\t</p>\n";
 		echo "</div>\n";
+	}
+	
+	// ==================================================================
+	//Print SQL/DB error.
+	private function _printError($sError = "") {
+		if(empty($sError)) {
+			$sError = mysql_error();
+		}
+		
+		// If there is an error then take note of it
+		print "<div style=\"font-family: Arial;font-size: 14px;color: #000000\">\n";
+		print "\t<span style=\"color: #ff0000\">SQL/DB Error</span>\n<br>";
+		print "\t".$sError."\n";
+		print "</div>";	
 	}
 	
 	// ==================================================================
