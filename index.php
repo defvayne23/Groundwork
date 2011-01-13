@@ -64,10 +64,10 @@ $aPatternGroups = array_chunk($aURLPatterns, 80, TRUE);
 // Run just created pattern chunks
 foreach($aPatternGroups as $aGroupChunk) {
 	$aPatterns = array();
-	$aKeys = array()
+	$aKeys = array();
 	
 	/* Prepare patterns for matching */
-	$i=0;
+	$i = 0;
 	foreach($aGroupChunk as $sIndex => $sValue) {
 		$aKeys[$i] = $sIndex;
 		$sIndex = preg_replace("/\{([a-z]+):([^}]+)\}/i", "($2)", $sIndex);
@@ -133,7 +133,7 @@ if(count($aURLPatterns[$sPattern]) > 0 && is_file($sSiteRoot."app/controllers/".
 			}
 			
 			// Combine dynamic and manual url variables to be loaded into the appController
-			$aURLVars = array_merge($urlParams, $aURLPattern["params"]);
+			$aURLVars = array_merge($urlParams, $aURLPattern["param"]);
 			
 			$oController = new $sController($sController);
 			$oController->$sAction();

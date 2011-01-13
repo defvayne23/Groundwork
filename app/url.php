@@ -10,7 +10,8 @@
 $aURLPatterns = array(
 	// "/search/" => array(
 	// 	"controller" => "content",
-	// 	"action" => "search"
+	// 	"action" => "search",
+	//	"param" => array()
 	// )
 );
 ###############################################
