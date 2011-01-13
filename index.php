@@ -154,13 +154,13 @@ if(count($aURLPatterns[$sPattern]) > 0 && is_file($sSiteRoot."app/controllers/".
 			$oController->$sAction($aURL);
 		} else {
 			$oApp = new appController;
-			$oApp->loadView("error/404.php");
+			$oApp->error("404");
 		}
 	} else {
 		$oApp = new appController;
-		$oApp->loadView("error/404.php");
+		$oApp->error("404");
 	}
 } else {
 	$oApp = new appController;
-	$oApp->loadView("error/404.php");
+	$oApp->error("404");
 }

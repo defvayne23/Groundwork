@@ -1,6 +1,6 @@
 <?php
 class appController {
-	private $viewData;
+	private $viewData = array();
 	
 	public $root;
 	public $controller;
@@ -28,6 +28,29 @@ class appController {
 				$this->model = $oModel;
 			}
 		}
+	}
+	
+	public function forward($sURL, $sResponse = 302) {
+		header("Location: ".$sURL, true, $sResponse);
+		exit;
+	}
+	
+	public function error($sError = "404") {
+		switch($sError) {
+			case "403":
+				header('HTTP/1.1 403 Forbidden');
+				$this->loadView("error/403.php");
+				break;
+			case "404":
+				header("HTTP/1.1 404 Not Found");
+				$this->loadView("error/404.php");
+				break;
+			case "500":
+				header("HTTP/1.1 500 Internal Server Error");
+				$this->loadView("error/500.php");
+				break;
+		}
+		exit;
 	}
 	
 	public function loadModel($sModel) {
