@@ -55,10 +55,10 @@ class db {
 	
 	// ==================================================================
 	//Basic Query	- see docs for more detail
-	public function query($query, $fetchMode = "null") {
+	public function query($query) {
 		if($this->isConnected()) {
 			// Log how the function was called
-			$this->funcCall = "\$db->query(\"$query\", $fetchMode)";		
+			$this->funcCall = "\$db->query(\"$query\")";		
 		
 			// Kill this
 			$this->lastResult = null;
