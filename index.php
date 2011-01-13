@@ -99,7 +99,7 @@ foreach($aPatternGroups as $aGroupChunk) {
 if($aConfig["database"]["connect"] == true) {
 	include($sSiteRoot."app/core/database.php");
 	$oDatabase = new db(
-		$aConfig["database"]["user"],
+		$aConfig["database"]["username"],
 		$aConfig["database"]["password"],
 		$aConfig["database"]["database"],
 		$aConfig["database"]["host"]
