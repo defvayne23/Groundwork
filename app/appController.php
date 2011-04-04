@@ -61,6 +61,8 @@ class appController {
 				if(class_exists($sModel."_model")) {
 					$sModel = $sModel."_model";
 					$oModel = new $sModel;
+				} else {
+					return false;
 				}
 			} else {
 				return false;
