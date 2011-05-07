@@ -8,7 +8,7 @@ $sSiteRoot = dirname(__FILE__)."/";
 ##############################################
 
 ##############################################
-include($sSiteRoot."app/config.php");
+include($sSiteRoot."app/config/config.php");
 
 // Set timezone
 putenv("TZ=".$aConfig["options"]["timezone"]);
@@ -56,7 +56,7 @@ if(empty($sAction)) {
 ##############################################
 
 ### PREPARE URL PATTERN ######################
-require($sSiteRoot."app/url.php");
+require($sSiteRoot."app/config/routes.php");
 
 // Split patterns into chunks to not choke the server
 $aPatternGroups = array_chunk($aURLPatterns, 80, TRUE);
@@ -109,7 +109,7 @@ if($aConfig["database"]["connect"] == true) {
 }
 ##############################################
 
-require($sSiteRoot."app/appController.php");
+require($sSiteRoot."app/core/controller.php");
 
 if(count($aURLPatterns[$sPattern]) > 0 && is_file($sSiteRoot."app/controllers/".$aURLPatterns[$sPattern]["controller"].".php")) {
 	$aURLPattern = $aURLPatterns[$sPattern];

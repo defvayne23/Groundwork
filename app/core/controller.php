@@ -1,5 +1,5 @@
 <?php
-class appController {
+class Controller {
 	private $_viewData = array();
 	
 	public $root;
