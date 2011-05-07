@@ -96,16 +96,16 @@ foreach($aPatternGroups as $aGroupChunk) {
 ##############################################
 
 ### DATABASE #################################
+include($sSiteRoot."app/core/database.php");
+$oDatabase = new db();
+
 if($aConfig["database"]["connect"] == true) {
-	include($sSiteRoot."app/core/database.php");
-	$oDatabase = new db(
+	$oDatabase->connect(
 		$aConfig["database"]["username"],
 		$aConfig["database"]["password"],
 		$aConfig["database"]["database"],
 		$aConfig["database"]["host"]
 	);
-} else {
-	$oDatabase = null;
 }
 ##############################################
 

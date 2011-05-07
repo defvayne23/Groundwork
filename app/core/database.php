@@ -11,35 +11,36 @@ class db {
 	
 	public $fetchMode = "assoc";
 	
-	public function __construct($dbuser, $dbpassword, $dbname, $dbhost) {
+	public function __construct($dbuser = "", $dbpassword = "", $dbname = "", $dbhost = "") {
+		if(!empty($dbuser) && !empty($dbname) && !empty($dbhost)) {
+			$this->connect($dbuser, $dbpassword, $dbname, $dbhost, debug_backtrace());
+		}
+	}
+	
+	public function connect($dbuser, $dbpassword, $dbname, $dbhost, $aBacktrace = array()) {
 		$this->dbh = @mysql_connect($dbhost,$dbuser,$dbpassword);
 		
+		if(empty($aBacktrace)) {
+			$aBacktrace = debug_backtrace();
+		}
+		
 		if(!$this->dbh) {
-			$this->_printError(
-				"<ol>\n"
-					."<b>Error establishing a database connection!</b>\n"
-					."<li>Are you sure you have the correct user/password?</li>\n"
-					."<li>Are you sure that you have typed the correct hostname?</li>\n"
-					."<li>Are you sure that the database server is running?</li>\n"
-				."</ol>"
-			);
+			$this->_printError("Error establishing a database connection!", $aBacktrace);
 		} else {
 			$this->connected = 1;
-			$this->changeDatabase($dbname);
+			$this->changeDatabase($dbname, $aBacktrace);
 		}
 	}
 	
 	// ==================================================================
 	//Select a DB (if another one needs to be selected)
-	public function changeDatabase($sDatabase) {
+	public function changeDatabase($sDatabase, $aBacktrace = array()) {
+		if(empty($aBacktrace)) {
+			$aBacktrace = debug_backtrace();
+		}
+		
 		if(!@mysql_select_db($sDatabase, $this->dbh)) {
-			$this->_printError(
-				"<ol>\n"
-					."<b>Error selecting database <u>".$sDatabase."</u>!</b>\n"
-					."<li>Are you sure it exists?</li>\n"
-					."<li>Are you sure there is a valid database connection?</li>\n"
-				."</ol>"
-			);
+			$this->_printError("Error selecting database <b>".$sDatabase."</b>", $aBacktrace);
 		} else {
 			$this->selectedDatabase = $sDatabase;
 		}
@@ -58,21 +59,21 @@ class db {
 	public function query($query) {
 		if($this->isConnected()) {
 			// Log how the function was called
-			$this->funcCall = "\$db->query(\"$query\")";		
-		
+			$this->funcCall = "\$db->query(\"".$query."\")";		
+			
 			// Kill this
 			$this->lastResult = null;
 			$this->colInfo = null;
-		
+			
 			// Keep track of the last query for debug..
 			$this->lastSQL = $query;
-		
+			
 			// Perform the query via std mysql_query function..
 			$this->result = mysql_query($query,$this->dbh);
-		
+			
 			if(mysql_error()) {
 				// If there is an error then take note of it..
-				$this->_printError();
+				$this->_printError(null, debug_backtrace());
 			} else {
 				// In other words if this was a select statement..
 				if($this->result) {
@@ -83,7 +84,7 @@ class db {
 						$this->colInfo[$i] = @mysql_fetch_field($this->result);
 						$i++;
 					}
-				
+					
 					// =======================================================				
 					// Store Query Results
 					$i=0;
@@ -93,9 +94,9 @@ class db {
 					
 						$i++;
 					}
-				
+					
 					@mysql_free_result($this->result);
-				
+					
 					// If there were results then return true for $db->query
 					if($i) {
 						return true;
@@ -105,7 +106,7 @@ class db {
 				}
 			}
 		} else {
-			return false;
+			$this->_printError("Database connection was not found to execute query.", debug_backtrace());
 		}
 	}
 	
@@ -113,31 +114,31 @@ class db {
 	//Get one variable from the DB - see docs for more detail
 	public function getOne($query=null,$x=0,$y=0) {
 		// Log how the function was called
-		$this->funcCall = "\$db->getOne(\"$query\",$x,$y)";
+		$this->funcCall = "\$db->getOne(\"".$query."\", ".$x.", ".$y.")";
 		
 		if($this->isConnected()) {
 			// If there is a query then perform it if not then use cached results..
 			if($query) {
 				$this->query($query);
 			}
-		
+			
 			if(!is_numeric($y)) {
 				$y = 0;
 			}
-		
+			
 			if(!is_numeric($x)) {
 				$x = 0;
 			}
-		
+			
 			// Extract var out of cached results based x,y vals
 			if($this->lastResult[$y]) {
 				$values = array_values(get_object_vars($this->lastResult[$y]));
 			}
-		
+			
 			// If there is a value return it else return null
 			return $values[$x]?$values[$x]:null;
 		} else {
-			return false;
+			$this->_printError("Database connection was not found to execute query", debug_backtrace());
 		}
 	}
 	
@@ -152,15 +153,15 @@ class db {
 			if($query) {
 				$this->query($query);
 			}
-		
+			
 			if(!is_numeric($y)) {
 				$y = 0;
 			}
-		
+			
 			if(empty($sFetchMode)) {
 				$sFetchMode = $this->fetchMode;
 			}
-		
+			
 			switch($sFetchMode) {
 				case "object":
 					// If the fetchMode is an object then return object using the row offset..
@@ -175,7 +176,7 @@ class db {
 					return $this->lastResult[$y]?array_values(get_object_vars($this->lastResult[$y])):null;
 			}
 		} else {
-			return false;
+			$this->_printError("Database connection was not found to execute query", debug_backtrace());
 		}
 	}
 	
@@ -188,68 +189,80 @@ class db {
 			if($query) {
 				$this->query($query);
 			}
-		
+			
 			// Extract the column values
 			for($i=0; $i < count($this->lastResult); $i++) {
 				$new_array[$i] = $this->getOne(null,$x,$i);
 			}
-		
+			
 			return $new_array;
 		} else {
-			return false;
+			$this->_printError("Database connection was not found to execute query", debug_backtrace());
 		}
 	}
 	
 	// ==================================================================
 	// Return the the query as a result set - see docs for more details
 	public function getAll($query = null, $fetchMode = null) {
-		// Log how the function was called
-		$this->funcCall = "\$db->get_results(\"$query\", $fetchMode)";
-		
-		// If there is a query then perform it if not then use cached results..
-		if ($query) {
-			$this->query($query);
-		}
-		
-		if(empty($fetchMode)) {
-			$fetchMode = $this->fetchMode;
-		}
-		
-		// Send back array of objects. Each row is an object		
-		if($fetchMode == "object") {
-			return $this->lastResult; 
-		} elseif($fetchMode == "assoc" || $fetchMode == "ordered") {
-			if($this->lastResult) {
-				$i=0;
-				foreach($this->lastResult as $row) {
-					$new_array[$i] = get_object_vars($row);
-					
-					if ($fetchMode == "ordered") {
-						$new_array[$i] = array_values($new_array[$i]);
+		if($this->isConnected()) {
+			// Log how the function was called
+			$this->funcCall = "\$db->get_results(\"$query\", $fetchMode)";
+			
+			// If there is a query then perform it if not then use cached results..
+			if ($query) {
+				$this->query($query);
+			}
+			
+			if(empty($fetchMode)) {
+				$fetchMode = $this->fetchMode;
+			}
+			
+			// Send back array of objects. Each row is an object		
+			if($fetchMode == "object") {
+				return $this->lastResult; 
+			} elseif($fetchMode == "assoc" || $fetchMode == "ordered") {
+				if($this->lastResult) {
+					$i=0;
+					foreach($this->lastResult as $row) {
+						$new_array[$i] = get_object_vars($row);
+						
+						if ($fetchMode == "ordered") {
+							$new_array[$i] = array_values($new_array[$i]);
+						}
+						
+						$i++;
 					}
 					
-					$i++;
+					return $new_array;
+				} else {
+					return null;	
 				}
-
-				return $new_array;
-			} else {
-				return null;	
 			}
+		} else {
+			$this->_printError("Database connection was not found to execute query", debug_backtrace());
 		}
 	}
 	
 	// ==================================================================
 	// Retrieve last AUTO_INCREMENT id created by this connection
 	public function lastInsertID() {
-        // not using mysql_insert_id() due to http://pear.php.net/bugs/bug.php?id=8051
-        return $this->getOne('SELECT LAST_INSERT_ID()');
-    }
+		if($this->isConnected()) {
+			// not using mysql_insert_id() due to http://pear.php.net/bugs/bug.php?id=8051
+			return $this->getOne('SELECT LAST_INSERT_ID()');
+		} else {
+			$this->_printError("Database connection was not found to execute query", debug_backtrace());
+		}
+	}
 	
 	// ==================================================================
 	// Retrieve number of rows affected by last query
 	public function affectedRows() {
-        return mysql_affected_rows($this->dbh);
-    }
+		if($this->isConnected()) {
+			return mysql_affected_rows($this->dbh);
+		} else {
+			$this->_printError("Database connection was not found to execute query", debug_backtrace());
+		}
+	}
 	
 	// ==================================================================
 	// Removes all stored info of previous query
@@ -265,7 +278,7 @@ class db {
 		$this->free();
 		@mysql_close($this->dbh);
 	}
-
+	
 	// ==================================================================
 	// Dumps the contents of any input variable to screen in a nicely
 	// formatted and easy to understand way - any type: Object, Var or Array
@@ -290,29 +303,29 @@ class db {
 		echo "\t</p>\n";
 		echo "\t<p>\n";
 		echo "\t\t<span style=\"font-weight: bold;\">Query Result..</span>\n";
-				
+		
 		if($this->colInfo) {
 			// =====================================================
 			// Results top rows
-	
+			
 			echo "\t\t<table cellpadding=\"5\" cellspacing=\"1\" bgcolor=\"555555\">";
 			echo "\t\t\t<tr bgcolor=\"eeeeee\">";
 			echo "\t\t\t\t<td nowrap valign=\"bottom\">\n";
 			echo "\t\t\t\t\t<span style=\"color: #555599;font-weight: bold;\">(row)</span>\n";
 			echo "\t\t\t\t</td>\n";
-	
+			
 			for($i=0; $i < count($this->colInfo); $i++) {
 				echo "\t\t\t\t<td nowrap align=\"left\" valign=\"top\">\n";
 				echo "\t\t\t\t\t<span style=\"font-size: 10px;color: #555599;\">".$this->colInfo[$i]->type." ".$this->colInfo[$i]->max_length."</span><br>\n";
 				echo "\t\t\t\t\t<span style=\"font-weight: bold;\">".$this->colInfo[$i]->name."</span>\n";
 				echo "\t\t\t\t</td>\n";
 			}
-
+			
 			echo "\t\t\t</tr>\n";
-
+			
 			// ======================================================
 			// print main results
-	
+			
 			if($this->lastResult) {
 				$i=0;
 				$aResults = $this->getAll(null, "ordered");
@@ -322,13 +335,13 @@ class db {
 					echo "\t\t\t\t<td bgcolor=\"eeeeee\" nowrap align=\"middle\">\n";
 					echo "\t\t\t\t\t<font style=\"color: #555599\">".$i."</span>\n";
 					echo "\t\t\t\t</td>\n";
-			
+					
 					foreach($one_row as $item) {
 						echo "\t\t\t\t<td nowrap>\n";
 						echo "\t\t\t\t\t".$item."\n";
 						echo "\t\t\t\t</td>\n";	
 					}
-			
+					
 					echo "\t\t\t</tr>\n";				
 				}
 			} else {
@@ -339,7 +352,7 @@ class db {
 				echo "\t\t\t\t</td>\n";
 				echo "\t\t\t</tr>\n";			
 			}
-	
+			
 			echo "\t\t</table>\n";		
 		} else {
 			// if colInfo
@@ -351,16 +364,19 @@ class db {
 	
 	// ==================================================================
 	//Print SQL/DB error.
-	private function _printError($sError = "") {
+	private function _printError($sError = "", $aBacktrace = array()) {
 		if(empty($sError)) {
 			$sError = mysql_error();
 		}
 		
+		if(empty($aBacktrace)) {
+			$aBacktrace = debug_backtrace();
+		}
+		
 		// If there is an error then take note of it
-		print "<div style=\"font-family: Arial;font-size: 14px;color: #000000\">\n";
-		print "\t<span style=\"color: #ff0000\">SQL/DB Error</span>\n<br>";
-		print "\t".$sError."\n";
-		print "</div>";	
+		echo "<br>\n";
+		echo "<b>Database Error</b>: ".$sError." in <b>".$aBacktrace[0]["file"]."</b> on line <b>".$aBacktrace[0]["line"]."</b><br>\n";
+		die;
 	}
 	
 	// ==================================================================
