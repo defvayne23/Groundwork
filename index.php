@@ -122,7 +122,7 @@ if(count($aURLPatterns[$sPattern]) > 0 && is_file($sSiteRoot."app/controllers/".
 		if(method_exists($sController, $sAction)) {
 			// Pull dynamic variables from url
 			$sPatternRGXP = preg_replace("/\{([a-z]+):([^}]+)\}/i", "(?P<$1>$2)", $sPattern);
-			preg_match("/".str_replace("/", "\/", $RGXP)."/i", $sURL, $aParamMatches);
+			preg_match("/".str_replace("/", "\/", $sPatternRGXP)."/i", $sURL, $aParamMatches);
 			
 			// Put dynamic variables into usable array
 			$urlParams = Array();
