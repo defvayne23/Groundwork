@@ -1,4 +1,4 @@
-h1. Groundwork
+h1. Groundwork (Alpha)
 
 PHP MVC framework created to start most web apps. Contains all the most basic functionality to begin coding. Used when a CMS is not the right route for your project.
 
