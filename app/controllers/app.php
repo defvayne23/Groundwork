@@ -1,5 +1,5 @@
 <?php
-class app extends appController {
+class app extends Controller {
 	function index() {
 		$this->assign("sIntro", "Hello world!");
 		

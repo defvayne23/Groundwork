@@ -133,7 +133,7 @@ if(count($aURLPatterns[$sPattern]) > 0 && is_file($sSiteRoot."app/controllers/".
 			}
 			
 			if(is_array($aURLPattern["param"])) {
-				// Combine dynamic and manual url variables to be loaded into the appController
+				// Combine dynamic and manual url variables to be loaded into the Controller
 				$aURLVars = array_merge($urlParams, $aURLPattern["param"]);
 			} else {
 				$aURLVars = $urlParams;
@@ -142,11 +142,11 @@ if(count($aURLPatterns[$sPattern]) > 0 && is_file($sSiteRoot."app/controllers/".
 			$oController = new $sController($sController);
 			$oController->$sAction();
 		} else {
-			$oApp = new appController;
+			$oApp = new Controller;
 			$oApp->loadView("error/404.php");
 		}
 	} else {
-		$oApp = new appController;
+		$oApp = new Controller;
 		$oApp->loadView("error/404.php");
 	}
 } elseif(is_file($sSiteRoot."app/controllers/".$sController.".php")) {
@@ -157,14 +157,14 @@ if(count($aURLPatterns[$sPattern]) > 0 && is_file($sSiteRoot."app/controllers/".
 			$oController = new $sController($sController, $aURL);
 			$oController->$sAction($aURL);
 		} else {
-			$oApp = new appController;
+			$oApp = new Controller;
 			$oApp->error("404");
 		}
 	} else {
-		$oApp = new appController;
+		$oApp = new Controller;
 		$oApp->error("404");
 	}
 } else {
-	$oApp = new appController;
+	$oApp = new Controller;
 	$oApp->error("404");
 }
