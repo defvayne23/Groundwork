@@ -4,7 +4,7 @@
 ### Url Pattern ###############################
 /*
  # Example URL Patterns:
- #   /page/{name:[a-z0-9]+}/
+ #   /page/<name:[a-z0-9]+>/
  #   /{tag:[a-z]+}/
 */
 $aURLPatterns = array(

@@ -70,7 +70,7 @@ foreach($aPatternGroups as $aGroupChunk) {
 	$i = 0;
 	foreach($aGroupChunk as $sIndex => $sValue) {
 		$aKeys[$i] = $sIndex;
-		$sIndex = preg_replace("/\{([a-z]+):([^}]+)\}/i", "($2)", $sIndex);
+		$sIndex = preg_replace("/<([a-z]+):(.+?)>/i", "($2)", $sIndex);
 		$aPatterns[] = "(?P<url".$i.">^".$sIndex."$)";
 		$i++;
 	}
@@ -121,19 +121,23 @@ if(count($aURLPatterns[$sPattern]) > 0 && is_file($sSiteRoot."app/controllers/".
 	if(class_exists($sController)) {
 		if(method_exists($sController, $sAction)) {
 			// Pull dynamic variables from url
-			$sPatternRGXP = preg_replace("/\{([a-z]+):([^}]+)\}/i", "(?P<$1>$2)", $sPattern);
+			$sPatternRGXP = preg_replace("/<([a-z]+):(.+?)>/i", "(?P<$1>$2)", $sPattern);
 			preg_match("/".str_replace("/", "\/", $sPatternRGXP)."/i", $sURL, $aParamMatches);
 			
 			// Put dynamic variables into usable array
-			$urlParams = Array();
+			$urlParams = array();
 			foreach($aParamMatches as $sKey => $sValue) {
 				if(!is_numeric($sKey) && !empty($sValue)) {
 					$urlParams[$sKey] = $sValue;
 				}
 			}
 			
-			// Combine dynamic and manual url variables to be loaded into the appController
-			$aURLVars = array_merge($urlParams, $aURLPattern["param"]);
+			if(is_array($aURLPattern["param"])) {
+				// Combine dynamic and manual url variables to be loaded into the appController
+				$aURLVars = array_merge($urlParams, $aURLPattern["param"]);
+			} else {
+				$aURLVars = $urlParams;
+			}
 			
 			$oController = new $sController($sController);
 			$oController->$sAction();
