@@ -160,7 +160,7 @@ if(count($aRoutePatterns[$sPattern]) > 0 && is_file($sSiteRoot."app/controllers/
 	if(class_exists($sController)) {
 		if(method_exists($sController, $sAction)) {
 			$oController = new $sController($sController, $aURL);
-			$oController->$sAction($aURL);
+			call_user_func_array(array($oController, $sAction), array_slice($aURL, 2));
 		} else {
 			$oApp = new Controller;
 			$oApp->error("404");
