@@ -109,7 +109,10 @@ if($aConfig["database"]["connect"] == true) {
 }
 ##############################################
 
+require($sSiteRoot."app/core/application.php");
 require($sSiteRoot."app/core/controller.php");
+require($sSiteRoot."app/core/model.php");
+require($sSiteRoot."app/core/load.php");
 
 Application::getInstance();
 

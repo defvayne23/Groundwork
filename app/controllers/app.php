@@ -1,8 +1,6 @@
 <?php
 class app extends Controller {
-	function index() {
-		$this->assign("sIntro", "Hello world!");
-		
-		$this->loadView("index.php");
+	public function index() {
+		$this->load->view("index.php", array("sIntro" => "Hello world!"), false);
 	}
 }

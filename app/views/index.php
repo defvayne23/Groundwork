@@ -1,8 +1,5 @@
-<?php
-$sPage = "home";
-$this->loadView("inc_header.php");
-?>
+<?php $this->load->view("inc_header.php", array('sPage' => 'home')); ?>
 	
-	<?php echo $sIntro; ?>
+	<h1><?php echo $sIntro; ?></h1>
 
-<?php $this->loadView("inc_footer.php"); ?>
+<?php $this->load->view("inc_footer.php"); ?>
