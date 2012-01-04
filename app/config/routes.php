@@ -5,9 +5,9 @@
 /*
  # Example URL Patterns:
  #   /page/<name:[a-z0-9]+>/
- #   /{tag:[a-z]+}/
+ #   /<tag:[a-z]+>/
 */
-$aURLPatterns = array(
+$aRoutePatterns = array(
 	// "/search/" => array(
 	// 	"controller" => "content",
 	// 	"action" => "search",
