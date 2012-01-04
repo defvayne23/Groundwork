@@ -1,5 +1,5 @@
 <?php
-class db {
+class Database {
 	private $dbh; // Database handle
 	private $funcCall; // Last method call
 	private $lastResult;

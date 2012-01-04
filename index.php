@@ -97,7 +97,7 @@ foreach($aPatternGroups as $aGroupChunk) {
 
 ### DATABASE #################################
 include($sSiteRoot."app/core/database.php");
-$oDatabase = new db();
+$oDatabase = new Database();
 
 if($aConfig["database"]["connect"] == true) {
 	$oDatabase->connect(
