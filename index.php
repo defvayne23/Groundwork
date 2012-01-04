@@ -59,7 +59,7 @@ if(empty($sAction)) {
 require($sSiteRoot."app/config/routes.php");
 
 // Split patterns into chunks to not choke the server
-$aPatternGroups = array_chunk($aURLPatterns, 80, TRUE);
+$aPatternGroups = array_chunk($aRoutePatterns, 80, TRUE);
 
 // Run just created pattern chunks
 foreach($aPatternGroups as $aGroupChunk) {
@@ -111,10 +111,12 @@ if($aConfig["database"]["connect"] == true) {
 
 require($sSiteRoot."app/core/controller.php");
 
-if(count($aURLPatterns[$sPattern]) > 0 && is_file($sSiteRoot."app/controllers/".$aURLPatterns[$sPattern]["controller"].".php")) {
-	$aURLPattern = $aURLPatterns[$sPattern];
-	$sController = $aURLPattern["controller"];
-	$sAction = $aURLPattern["action"];
+Application::getInstance();
+
+if(count($aRoutePatterns[$sPattern]) > 0 && is_file($sSiteRoot."app/controllers/".$aRoutePatterns[$sPattern]["controller"].".php")) {
+	$aRoutePattern = $aRoutePatterns[$sPattern];
+	$sController = $aRoutePattern["controller"];
+	$sAction = $aRoutePattern["action"];
 	
 	include($sSiteRoot."app/controllers/".$sController.".php");
 	
@@ -132,9 +134,9 @@ if(count($aURLPatterns[$sPattern]) > 0 && is_file($sSiteRoot."app/controllers/".
 				}
 			}
 			
-			if(is_array($aURLPattern["param"])) {
+			if(is_array($aRoutePattern["param"])) {
 				// Combine dynamic and manual url variables to be loaded into the Controller
-				$aURLVars = array_merge($urlParams, $aURLPattern["param"]);
+				$aURLVars = array_merge($urlParams, $aRoutePattern["param"]);
 			} else {
 				$aURLVars = $urlParams;
 			}
