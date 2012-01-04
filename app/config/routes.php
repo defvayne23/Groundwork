@@ -8,10 +8,10 @@
  #   /<tag:[a-z]+>/
 */
 $aRoutePatterns = array(
-	// "/search/" => array(
-	// 	"controller" => "content",
-	// 	"action" => "search",
-	//	"param" => array()
+	// '/search/' => array(
+	// 	'controller' => 'content',
+	// 	'action' => 'search',
+	//	'param' => array()
 	// )
 );
 ###############################################

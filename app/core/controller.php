@@ -20,7 +20,7 @@ class Controller {
 	}
 	
 	public function redirect($sURL, $sResponse = 302) {
-		header("Location: ".$sURL, true, $sResponse);
+		header('Location: '.$sURL, true, $sResponse);
 		exit;
 	}
 }

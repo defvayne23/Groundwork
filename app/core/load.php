@@ -10,10 +10,10 @@ class GW_Load {
 	
 	public function controller($sController) {
 		if(!class_exists($sController)) {
-			if(is_file($this->root."app/controllers/".$sController.".php")) {
-				include($this->root."app/controllers/".$sController.".php");
+			if(is_file($this->root.'app/controllers/'.$sController.'.php')) {
+				include($this->root.'app/controllers/'.$sController.'.php');
 				
-				if(class_exists($sController."_model")) {
+				if(class_exists($sController.'_model')) {
 					$oController = new $sController;
 				} else {
 					return false;
@@ -29,12 +29,12 @@ class GW_Load {
 	}
 	
 	public function model($sModel) {
-		if(!class_exists($sModel."_model")) {
-			if(is_file($this->root."app/models/".$sModel.".php")) {
-				include($this->root."app/models/".$sModel.".php");
+		if(!class_exists($sModel.'_model')) {
+			if(is_file($this->root.'app/models/'.$sModel.'.php')) {
+				include($this->root.'app/models/'.$sModel.'.php');
 				
-				if(class_exists($sModel."_model")) {
-					$sModel = $sModel."_model";
+				if(class_exists($sModel.'_model')) {
+					$sModel = $sModel.'_model';
 					$oModel = new $sModel;
 				} else {
 					return false;
@@ -43,7 +43,7 @@ class GW_Load {
 				return false;
 			}
 		} else {
-			$sModel = $sModel."_model";
+			$sModel = $sModel.'_model';
 			$oModel = new $sModel;
 		}
 		
@@ -51,7 +51,7 @@ class GW_Load {
 	}
 	
 	public function view($sTemplate, $aAssign = array(), $sReturn = false) {
-		if(is_file($this->root."app/views/".$sTemplate)) {
+		if(is_file($this->root.'app/views/'.$sTemplate)) {
 			foreach($aAssign as $sName => $sValue) {
 				$$sName = $sValue;
 			}
@@ -60,7 +60,7 @@ class GW_Load {
 			
 			ob_start();
 			
-			include($this->root."app/views/".$sTemplate);
+			include($this->root.'app/views/'.$sTemplate);
 			
 			if($sReturn === true) {
 				$sView = ob_get_contents();
@@ -73,11 +73,11 @@ class GW_Load {
 	}
 	
 	public function helper($sHelper) {
-		if(!function_exists($sHelper."_helper")) {
-			if(is_file($this->root."app/helpers/".$sHelper.".php")) {
-				include($this->root."app/helpers/".$sHelper.".php");
+		if(!function_exists($sHelper.'_helper')) {
+			if(is_file($this->root.'app/helpers/'.$sHelper.'.php')) {
+				include($this->root.'app/helpers/'.$sHelper.'.php');
 				
-				if(!function_exists($sHelper."_helper")) {
+				if(!function_exists($sHelper.'_helper')) {
 					return false;
 				}
 			} else {
