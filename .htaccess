@@ -29,9 +29,14 @@ AddType font/x-woff                   woff
 RewriteEngine On
 RewriteBase /
 
+# Remove the www from domain
 RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
 RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
 
-# Pass everything else to the app
+# If request is for the app folder, pass it to the application
+RewriteCond %{REQUEST_FILENAME} /app/(.*)$
+RewriteRule ^.*$ index.php
+
+# If file does not exist, pass it to the application
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^.*$ index.php
