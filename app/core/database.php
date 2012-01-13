@@ -206,7 +206,7 @@ class Database {
 	public function getAll($query = null, $fetchMode = null) {
 		if($this->isConnected()) {
 			// Log how the function was called
-			$this->funcCall = '$db->get_results("'.$query'.", '.$fetchMode.')';
+			$this->funcCall = '$db->get_results("'.$query.'", '.$fetchMode.')';
 			
 			// If there is a query then perform it if not then use cached results..
 			if ($query) {
