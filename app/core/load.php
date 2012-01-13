@@ -22,7 +22,7 @@ class Load extends GW {
 		return $oController;
 	}
 	
-	public function model($sModel) {
+	public function model($sModel, $sName = null) {
 		if(!class_exists($sModel.'_model')) {
 			if(is_file($this->root.'app/models/'.$sModel.'.php')) {
 				include($this->root.'app/models/'.$sModel.'.php');
@@ -43,7 +43,11 @@ class Load extends GW {
 			$oModel = new $sModel;
 		}
 		
-		return $oModel;
+		if(!empty($sName)) {
+			$this->$sName = $oModel;
+		} else {
+			return $oModel;
+		}
 	}
 	
 	public function view($sTemplate, $aAssign = array(), $sReturn = false) {
