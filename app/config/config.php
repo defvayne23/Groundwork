@@ -1,7 +1,13 @@
 <?php
+### CORE ######################################
+$aConfig['env'] = 'Development'; // Production, Development
+$aConfig['base'] = ''; // Base URL. If not set, will try to generate automatically. (http://example.com/)
+$aConfig['logThreshold'] = 4; // 0 = Off, 1 = Error, 2 = Notice, 3 = Debug, 4 = Info, 5 = All
+###############################################
+
 ### OPTIONS ###################################
 $aConfig['options']['timezone'] = 'America/Chicago';
-$aConfig['options']['formatDate'] = 'F d, Y';
+$aConfig['options']['formatDate'] = 'y-m-d';
 $aConfig['options']['formatTime'] = 'h:i a';
 ###############################################
 
