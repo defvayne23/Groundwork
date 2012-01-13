@@ -19,3 +19,13 @@ $aConfig['database']['password'] = '';
 $aConfig['database']['database'] = '';
 $aConfig['database']['fetch'] = 'assoc'; // object, assoc, ordered
 ###############################################
+
+### AUTOLOAD ##################################
+$aConfig['autoLoad']['model'] = array(
+	// array('model_name'[, 'set_name'])
+	// 'model_name'
+);
+$aConfig['autoLoad']['helper'] = array(
+	// 'helper_name'
+);
+###############################################

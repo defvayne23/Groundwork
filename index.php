@@ -117,6 +117,18 @@ $oError = new Error();
 $oLoad->reloadInstance();
 $oError->reloadInstance();
 
+foreach($aConfig['autoLoad'] as $sType => $aValues) {
+	if(in_array($sType, array('model', 'helper'))) {
+		foreach($aValues as $sValue) {
+			if(is_array($sValue)) {
+				call_user_func_array(array($oApp->load, $sType), $sValue);
+			} else {
+				$oapp->load->$sType($sValue);
+			}
+		}
+	}
+}
+
 ob_start();
 ob_implicit_flush(false);
 
@@ -149,7 +161,6 @@ if(count($aRoutePatterns[$sPattern]) > 0 && is_file($sSiteRoot.'app/controllers/
 			}
 			
 			$oController = $oApp->load->controller($sController);
-			// $oController = new $sController($sController);
 			$oController->$sAction();
 		} else {
 			$oApp->error->send('Page not found.', '404');
