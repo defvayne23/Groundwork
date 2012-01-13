@@ -104,12 +104,21 @@ if($aConfig['database']['connect'] == true) {
 }
 ##############################################
 
+require($sSiteRoot.'app/core/gw.php');
 require($sSiteRoot.'app/core/application.php');
 require($sSiteRoot.'app/core/controller.php');
 require($sSiteRoot.'app/core/model.php');
 require($sSiteRoot.'app/core/load.php');
+require($sSiteRoot.'app/core/error.php');
 
-Application::getInstance();
+$oApp = Application::getInstance(true, 'index');
+$oLoad = new Load();
+$oError = new Error();
+$oLoad->reloadInstance();
+$oError->reloadInstance();
+
+ob_start();
+ob_implicit_flush(false);
 
 if(count($aRoutePatterns[$sPattern]) > 0 && is_file($sSiteRoot.'app/controllers/'.$aRoutePatterns[$sPattern]['controller'].'.php')) {
 	$aRoutePattern = $aRoutePatterns[$sPattern];

@@ -1,13 +1,5 @@
 <?php
-class GW_Load {
-	public function __construct() {
-		$App = Application::getInstance(false);
-		
-		foreach($App as $key => $value) {
-			$this->$key = $value;
-		}
-	}
-	
+class Load extends GW {
 	public function controller($sController) {
 		if(!class_exists($sController)) {
 			if(is_file($this->root.'app/controllers/'.$sController.'.php')) {
@@ -16,10 +8,12 @@ class GW_Load {
 				if(class_exists($sController.'_model')) {
 					$oController = new $sController;
 				} else {
-					return false;
+					$aTrace = debug_backtrace();
+					$this->error->trigger('Could not load controller \''.$sController.'\'. Failed to find class.', 'ERROR', $aTrace[0]);
 				}
-			} else {
-				return false;
+			} else {	
+					$aTrace = debug_backtrace();
+					$this->error->trigger('Could not load controller \''.$sController.'\'. File not found. ('.$this->root.'app/controllers/'.$sController.'.php)', 'ERROR', $aTrace[0]);
 			}
 		} else {
 			$oController = new $sController;
@@ -37,10 +31,12 @@ class GW_Load {
 					$sModel = $sModel.'_model';
 					$oModel = new $sModel;
 				} else {
-					return false;
+					$aTrace = debug_backtrace();
+					$this->error->trigger('Could not load model \''.$sModel.'\'. Failed to find class.', 'ERROR', $aTrace[0]);
 				}
-			} else {
-				return false;
+			} else {	
+				$aTrace = debug_backtrace();
+				$this->error->trigger('Could not load model \''.$sModel.'\'. File not found. ('.$this->root.'app/models/'.$sModel.'.php)', 'ERROR', $aTrace[0]);
 			}
 		} else {
 			$sModel = $sModel.'_model';
@@ -56,19 +52,18 @@ class GW_Load {
 				$$sName = $sValue;
 			}
 			
-			$this->load = $this;
-			
 			ob_start();
 			
 			include($this->root.'app/views/'.$sTemplate);
 			
-			if($sReturn === true) {
+			if($sReturn == true) {
 				$sView = ob_get_contents();
-				@ob_end_clean();
+				ob_end_clean();
 				return $sView;
 			}
 		} else {
-			return false;
+			$aTrace = debug_backtrace();
+			$this->error->trigger('Could not load view \''.$sTemplate.'\'. File not found. ('.$this->root.'app/views/'.$sTemplate.'.php)', 'ERROR', $aTrace[0]);
 		}
 	}
 	

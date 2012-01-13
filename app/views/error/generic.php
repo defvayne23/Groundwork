@@ -1,7 +1,7 @@
 <?php $this->load->view('inc_header.php'); ?>
 
-	<h2>Error 500</h2>
+	<h2><?php echo $sHeader; ?></h2>
 	
-	<p>Internal server error.</p>
+	<p><?php echo $sMessage; ?></p>
 
 <?php $this->load->view('inc_footer.php'); ?>

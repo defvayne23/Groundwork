@@ -1,13 +1,9 @@
 <?php
-class Controller {
+class Controller extends GW {
 	public $model;
 	
-	public function __construct($sModel = null) {
-		$App = Application::getInstance(false);
-		
-		foreach($App as $key => $value) {
-			$this->$key = $value;
-		}
+	public function __construct() {
+		parent::__construct();
 		
 		## Auto-load model based on controller name
 		if(!empty($sModel)) {
