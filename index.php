@@ -148,15 +148,14 @@ if(count($aRoutePatterns[$sPattern]) > 0 && is_file($sSiteRoot.'app/controllers/
 				$aURLVars = $urlParams;
 			}
 			
-			$oController = new $sController($sController);
+			$oController = $oApp->load->controller($sController);
+			// $oController = new $sController($sController);
 			$oController->$sAction();
 		} else {
-			$oApp = new Controller;
-			$oApp->error('404');
+			$oApp->error->send('Page not found.', '404');
 		}
 	} else {
-		$oApp = new Controller;
-		$oApp->error('404');
+		$oApp->error->send('Page not found.', '404');
 	}
 } elseif(is_file($sSiteRoot.'app/controllers/'.$sController.'.php')) {
 	include($sSiteRoot.'app/controllers/'.$sController.'.php');
@@ -166,14 +165,14 @@ if(count($aRoutePatterns[$sPattern]) > 0 && is_file($sSiteRoot.'app/controllers/
 			$oController = new $sController($sController, $aURL);
 			call_user_func_array(array($oController, $sAction), array_slice($aURL, 2));
 		} else {
-			$oApp = new Controller;
-			$oApp->error('404');
+			$oApp->error->send('Page not found.', '404');
 		}
 	} else {
-		$oApp = new Controller;
-		$oApp->error('404');
+		$oApp->error->send('Page not found.', '404');
 	}
 } else {
-	$oApp = new Controller;
-	$oApp->error('404');
+	$oApp->error->send('Page not found.', '404');
 }
+
+echo ob_get_contents();
+ob_end_clean();

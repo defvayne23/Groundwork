@@ -4,6 +4,6 @@
 	<meta name="keywords" content="">
 	<meta name="description" content="">
 	
-	<title>Framework</title>
+	<title>Groundwork</title>
 </head>
 <body class="<?php echo $sPage; ?>">
