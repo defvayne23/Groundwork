@@ -66,7 +66,7 @@ class Error extends GW {
 		}
 	}
 	
-	public function log($sLevel = 'ERROR', $sMessage) {
+	public function log($sMessage, $sLevel = 'ERROR') {
 		$sLogPath = $this->root.'app/logs/';
 		
 		if(!$this->is_really_writable($sLogPath)) {
