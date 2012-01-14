@@ -90,20 +90,7 @@ foreach($aPatternGroups as $aGroupChunk) {
 }
 ##############################################
 
-### DATABASE #################################
-include($sSiteRoot.'app/core/database.php');
-$oDatabase = new Database();
-
-if($aConfig['database']['connect'] == true) {
-	$oDatabase->connect(
-		$aConfig['database']['username'],
-		$aConfig['database']['password'],
-		$aConfig['database']['database'],
-		$aConfig['database']['host']
-	);
-}
-##############################################
-
+### APPLICATION ##############################
 require($sSiteRoot.'app/core/gw.php');
 require($sSiteRoot.'app/core/application.php');
 require($sSiteRoot.'app/core/controller.php');
@@ -116,6 +103,22 @@ $oLoad = new Load();
 $oError = new Error();
 $oLoad->reloadInstance();
 $oError->reloadInstance();
+##############################################
+
+### DATABASE #################################
+include($sSiteRoot.'app/core/database.php');
+$oDatabase = new Database();
+$oDatabase->reloadInstance();
+
+if($aConfig['database']['connect'] == true) {
+	$oDatabase->connect(
+		$aConfig['database']['username'],
+		$aConfig['database']['password'],
+		$aConfig['database']['database'],
+		$aConfig['database']['host']
+	);
+}
+##############################################
 
 foreach($aConfig['autoLoad'] as $sType => $aValues) {
 	if(in_array($sType, array('model', 'helper'))) {

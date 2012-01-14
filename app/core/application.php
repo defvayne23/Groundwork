@@ -24,10 +24,7 @@ class Application {
 	}
 	
 	public function __construct() {
-		global $aConfig, $sSiteRoot, $sController, $sAction, $aURL, $aURLVars, $oDatabase;
-		
-		// Methods
-		$this->db = $oDatabase;
+		global $aConfig, $sSiteRoot, $sController, $sAction, $aURL, $aURLVars;
 		
 		// Variables
 		$this->config = $aConfig;

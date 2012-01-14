@@ -6,7 +6,7 @@ abstract class GW {
 	public function __construct() {
 		$App = Application::getInstance();
 		
-		if(in_array(get_called_class(), array('Load', 'Error'))) {
+		if(in_array(get_called_class(), array('Database', 'Load', 'Error'))) {
 			$sKey = strtolower(get_called_class());
 			$App->$sKey = $this;
 		}

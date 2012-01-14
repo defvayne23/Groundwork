@@ -1,5 +1,5 @@
 <?php
-class Database {
+class Database extends GW {
 	private $dbh; // Database handle
 	private $funcCall; // Last method call
 	private $lastResult;
@@ -25,7 +25,7 @@ class Database {
 		}
 		
 		if(!$this->dbh) {
-			$this->_printError('Error establishing a database connection!', $aBacktrace);
+			$this->_printError('Error establishing a database connection! '.mysql_error(), $aBacktrace);
 		} else {
 			$this->connected = 1;
 			$this->changeDatabase($dbname, $aBacktrace);
@@ -56,11 +56,15 @@ class Database {
 	
 	// ==================================================================
 	//Basic Query	- see docs for more detail
-	public function query($query) {
+	public function query($query, $aBacktrace = array()) {
+		if(empty($aBacktrace)) {
+			$aBacktrace = debug_backtrace();
+		}
+		
+		// Log how the function was called
+		$this->funcCall = '$db->query("'.$query.'")';
+		
 		if($this->isConnected()) {
-			// Log how the function was called
-			$this->funcCall = '$db->query("'.$query.'")';		
-			
 			// Kill this
 			$this->lastResult = null;
 			$this->colInfo = null;
@@ -73,7 +77,7 @@ class Database {
 			
 			if(mysql_error()) {
 				// If there is an error then take note of it..
-				$this->_printError(null, debug_backtrace());
+				$this->_printError(null, $aBacktrace);
 			} else {
 				// In other words if this was a select statement..
 				if($this->result) {
@@ -106,20 +110,51 @@ class Database {
 				}
 			}
 		} else {
-			$this->_printError('Database connection was not found to execute query.', debug_backtrace());
+			$this->_printError('Database connection was not found to execute query.', $aBacktrace);
+		}
+	}
+	
+	// ==================================================================
+	//Creates a collection of all the get functions
+	public function get($sQuery = null, $sType = 'all') {
+		$sType = strtolower($sType);
+		
+		$this->funcCall = '$db->get("'.$sQuery.'", "'.$sType.'")';
+		
+		if($this->isConnected()) {
+			switch($sType) {
+				case 'one':
+					return $this->getOne($sQuery, 0, 0, debug_backtrace());
+					break;
+				case 'row':
+					return $this->getRow($sQuery, 0, null, debug_backtrace());
+					break;
+				case 'col':
+					return $this->getCol($sQuery, 0, debug_backtrace());
+					break;
+				case 'all':
+					return $this->getAll($sQuery, null, debug_backtrace());
+					break;
+			}
+		} else {
+			$this->_printError('Database connection was not found to execute query', debug_backtrace());
 		}
 	}
 	
 	// ==================================================================
 	//Get one variable from the DB - see docs for more detail
-	public function getOne($query=null, $x=0, $y=0) {
+	public function getOne($query = null, $x = 0, $y = 0, $aBacktrace = array()) {
+		if(empty($aBacktrace)) {
+			$aBacktrace = debug_backtrace();
+		}
+		
 		// Log how the function was called
 		$this->funcCall = '$db->getOne("'.$query.'", '.$x.', '.$y.')';
 		
 		if($this->isConnected()) {
 			// If there is a query then perform it if not then use cached results..
 			if($query) {
-				$this->query($query);
+				$this->query($query, $aBacktrace);
 			}
 			
 			if(!is_numeric($y)) {
@@ -144,14 +179,18 @@ class Database {
 	
 	// ==================================================================
 	//Get one row from the DB - see docs for more detail
-	public function getRow($query = null, $y = 0, $sFetchMode = null) {	
+	public function getRow($query = null, $y = 0, $sFetchMode = null, $aBacktrace = array()) {
+		if(empty($aBacktrace)) {
+			$aBacktrace = debug_backtrace();
+		}
+		
 		// Log how the function was called
-		$this->funcCall = '$db->get_row("'.$query.'", '.$y.', '.$fetchMode.')';
+		$this->funcCall = '$db->getCol("'.$query.'", '.$y.', '.$sFetchMode.')';
 		
 		if($this->isConnected()) {
 			// If there is a query then perform it if not then use cached results..
 			if($query) {
-				$this->query($query);
+				$this->query($query, $aBacktrace);
 			}
 			
 			if(!is_numeric($y)) {
@@ -176,18 +215,24 @@ class Database {
 					return $this->lastResult[$y]?array_values(get_object_vars($this->lastResult[$y])):null;
 			}
 		} else {
-			$this->_printError('Database connection was not found to execute query', debug_backtrace());
+			$this->_printError('Database connection was not found to execute query', $aBacktrace);
 		}
 	}
 	
 	// ==================================================================
 	//Function to get 1 column from the cached result set based in X index
 	// se docs for usage and info
-	public function getCol($query=null,$x=0) {
+	public function getCol($query = null, $x = 0, $aBacktrace = array()) {
+		if(empty($aBacktrace)) {
+			$aBacktrace = debug_backtrace();
+		}
+		
+		$this->funcCall = '$db->getCol("'.$query.'", '.$x.')';
+		
 		if($this->isConnected()) {
 			// If there is a query then perform it if not then use cached results..
 			if($query) {
-				$this->query($query);
+				$this->query($query, $aBacktrace);
 			}
 			
 			// Extract the column values
@@ -197,20 +242,23 @@ class Database {
 			
 			return $new_array;
 		} else {
-			$this->_printError('Database connection was not found to execute query', debug_backtrace());
+			$this->_printError('Database connection was not found to execute query', $aBacktrace);
 		}
 	}
 	
 	// ==================================================================
 	// Return the the query as a result set - see docs for more details
-	public function getAll($query = null, $fetchMode = null) {
+	public function getAll($query = null, $fetchMode = null, $aBacktrace = array()) {
+		if(empty($aBacktrace)) {
+			$aBacktrace = debug_backtrace();
+		}
+		
+		$this->funcCall = '$db->getAll("'.$query.'", '.$fetchMode.')';
+		
 		if($this->isConnected()) {
-			// Log how the function was called
-			$this->funcCall = '$db->get_results("'.$query.'", '.$fetchMode.')';
-			
 			// If there is a query then perform it if not then use cached results..
 			if ($query) {
-				$this->query($query);
+				$this->query($query, $aBacktrace);
 			}
 			
 			if(empty($fetchMode)) {
@@ -239,7 +287,7 @@ class Database {
 				}
 			}
 		} else {
-			$this->_printError('Database connection was not found to execute query', debug_backtrace());
+			$this->_printError('Database connection was not found to execute query', $aBacktrace);
 		}
 	}
 	
@@ -276,20 +324,8 @@ class Database {
 	// Close connection to database
 	public function disconnect() {
 		$this->free();
+		$this->connected = 0;
 		@mysql_close($this->dbh);
-	}
-	
-	// ==================================================================
-	// Dumps the contents of any input variable to screen in a nicely
-	// formatted and easy to understand way - any type: Object, Var or Array
-	public function vardump($mixed) {
-		echo '<blockquote><span style="font-family: Arial;font-size:10px;color:#666;"><pre>';
-		print_r($mixed);	
-		echo '<b>Last Query:</b> '.($this->lastSQL?$this->lastSQL:'NULL')."\n";
-		echo '<b>Last Function Call:</b> ' . ($this->funcCall?$this->funcCall:"None")."\n";
-		echo '<b>Last Rows Returned:</b> '.count($this->lastResult)."\n";
-		echo '</pre></span></blockquote>';
-		echo '<hr size="1" noshade color="dddddd">';
 	}
 	
 	// ==================================================================
@@ -297,69 +333,12 @@ class Database {
 	// table listing results (if there were any). 
 	// (abstracted into a seperate file to save server overhead).
 	public function debug() {
-		echo "<div style=\"font-family: Arial;font-size: 14px;color: #000000;\">\n";
-		echo "\t<p>\n";
-		echo "\t\t<span style=\"font-weight: bold;\">Query</span> - [".$this->lastSQL."]\n";
-		echo "\t</p>\n";
-		echo "\t<p>\n";
-		echo "\t\t<span style=\"font-weight: bold;\">Query Result..</span>\n";
-		
-		if($this->colInfo) {
-			// =====================================================
-			// Results top rows
-			
-			echo "\t\t<table cellpadding=\"5\" cellspacing=\"1\" bgcolor=\"555555\">";
-			echo "\t\t\t<tr bgcolor=\"eeeeee\">";
-			echo "\t\t\t\t<td nowrap valign=\"bottom\">\n";
-			echo "\t\t\t\t\t<span style=\"color: #555599;font-weight: bold;\">(row)</span>\n";
-			echo "\t\t\t\t</td>\n";
-			
-			for($i=0; $i < count($this->colInfo); $i++) {
-				echo "\t\t\t\t<td nowrap align=\"left\" valign=\"top\">\n";
-				echo "\t\t\t\t\t<span style=\"font-size: 10px;color: #555599;\">".$this->colInfo[$i]->type." ".$this->colInfo[$i]->max_length."</span><br>\n";
-				echo "\t\t\t\t\t<span style=\"font-weight: bold;\">".$this->colInfo[$i]->name."</span>\n";
-				echo "\t\t\t\t</td>\n";
-			}
-			
-			echo "\t\t\t</tr>\n";
-			
-			// ======================================================
-			// print main results
-			
-			if($this->lastResult) {
-				$i=0;
-				$aResults = $this->getAll(null, "ordered");
-				foreach($aResults as $one_row) {
-					$i++;
-					echo "\t\t\t<tr bgcolor=\"ffffff\">\n";
-					echo "\t\t\t\t<td bgcolor=\"eeeeee\" nowrap align=\"middle\">\n";
-					echo "\t\t\t\t\t<font style=\"color: #555599\">".$i."</span>\n";
-					echo "\t\t\t\t</td>\n";
-					
-					foreach($one_row as $item) {
-						echo "\t\t\t\t<td nowrap>\n";
-						echo "\t\t\t\t\t".$item."\n";
-						echo "\t\t\t\t</td>\n";	
-					}
-					
-					echo "\t\t\t</tr>\n";				
-				}
-			} else {
-				// if last result
-				echo "\t\t\t<tr bgcolor=\"ffffff\">\n";
-				echo "\t\t\t\t<td colspan=\"".(count($this->colInfo)+1)."\">\n";
-				echo "\t\t\t\t\tNo Results\n";
-				echo "\t\t\t\t</td>\n";
-				echo "\t\t\t</tr>\n";			
-			}
-			
-			echo "\t\t</table>\n";		
-		} else {
-			// if colInfo
-			echo "\t\tNo Results\n";			
-		}
-		echo "\t</p>\n";
-		echo "</div>\n";
+		echo '<span style="font-family: Arial;font-size:14px;color:#666;">';
+		echo '<b>Last Query:</b> '.($this->lastSQL?$this->lastSQL:'NULL').'<br>';
+		echo '<b>Last Function Call:</b> '.($this->funcCall?$this->funcCall:"None").'<br>';
+		echo '<b>Last Rows Returned:</b> '.count($this->lastResult).'<br>';
+		echo '</span>';
+		echo '<hr size="1" noshade color="dddddd">';
 	}
 	
 	// ==================================================================
@@ -373,27 +352,7 @@ class Database {
 			$aBacktrace = debug_backtrace();
 		}
 		
-		// If there is an error then take note of it
-		echo '<br>';
-		echo '<b>Database Error</b>: '.$sError.' in <b>'.$aBacktrace[0]['file'].'</b> on line <b>'.$aBacktrace[0]["line"].'</b><br>';
+		$this->error->trigger($sError, 'error', $aBacktrace[0]);
 		die;
-	}
-	
-	// ==================================================================
-	// Function to get column meta data info pertaining to the last query
-	// see docs for more info and usage
-	private function _getColInfo($info_type = 'name', $col_offset = -1) {
-		if($this->colInfo) {
-			if($col_offset == -1) {
-				$i=0;
-				foreach($this->colInfo as $col) {
-					$new_array[$i] = $col->{$info_type};
-					$i++;
-				}
-				return $new_array;
-			} else {
-				return $this->colInfo[$col_offset]->{$info_type};
-			}
-		}
 	}
 }
