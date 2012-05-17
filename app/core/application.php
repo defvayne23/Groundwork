@@ -34,4 +34,8 @@ class Application {
 		$this->url = $aURL;
 		$this->param = $aURLVars;
 	}
+	
+	public function setDatabase($oDatabase) {
+		$this->db = $oDatabase;
+	}
 }

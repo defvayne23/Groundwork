@@ -3,10 +3,10 @@ abstract class GW {
 	private $_app;
 	private $_class;
 	
-	public function __construct() {
+	public function __construct($sSetInstance = false) {
 		$App = Application::getInstance();
 		
-		if(in_array(get_called_class(), array('Database', 'Load', 'Error'))) {
+		if($sSetInstance === true) {
 			$sKey = strtolower(get_called_class());
 			$App->$sKey = $this;
 		}
@@ -49,7 +49,7 @@ abstract class GW {
 		unset($this->_app->$sName);
 	}
 	
-	public function reloadInstance() {
-		$this->__construct();
+	public function reloadInstance($sSetInstance = false) {
+		$this->__construct($sSetInstance);
 	}
 }

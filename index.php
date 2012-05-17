@@ -14,7 +14,7 @@ include($sSiteRoot.'app/config/config.php');
 putenv('TZ='.$aConfig['options']['timezone']);
 date_default_timezone_set($aConfig['options']['timezone']);
 
-ini_set('include_path', ini_get('include_path').':'.$sSiteRoot.'app/views/');
+ini_set('include_path', ini_get('include_path').':'.$sSiteRoot.'app/core/libraries/:'.$sSiteRoot.'app/views/');
 
 ### URL VARIABLES ############################
 // Remove _GET parameters from url
@@ -101,14 +101,14 @@ require($sSiteRoot.'app/core/error.php');
 $oApp = Application::getInstance(true, 'index');
 $oLoad = new Load();
 $oError = new Error();
-$oLoad->reloadInstance();
-$oError->reloadInstance();
+$oLoad->reloadInstance(true);
+$oError->reloadInstance(true);
 ##############################################
 
 ### DATABASE #################################
-include($sSiteRoot.'app/core/database.php');
-$oDatabase = new Database();
-$oDatabase->reloadInstance();
+include($sSiteRoot.'app/core/libraries/stratum/database.php');
+$oDatabase = new Stratum();
+$oApp->setDatabase($oDatabase);
 
 if($aConfig['database']['connect'] == true) {
 	$oDatabase->connect(

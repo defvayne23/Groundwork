@@ -1,0 +1,3 @@
+[submodule "app/core/libraries/stratum"]
+	path = app/core/libraries/stratum
+	url = git@github.com:defvayne23/Stratum.git
