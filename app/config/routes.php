@@ -9,9 +9,12 @@
 */
 $aRoutePatterns = array(
 	// '/search/' => array(
-	// 	'controller' => 'content',
-	// 	'action' => 'search',
+	//  'route' => 'content/search',
 	//	'param' => array()
 	// )
+	//
+	// '/news/' => 'news/index'
+	//
+	// '/news/<id:[0-9]+>/' => 'news/article'
 );
 ###############################################

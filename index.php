@@ -135,10 +135,14 @@ foreach($aConfig['autoLoad'] as $sType => $aValues) {
 ob_start();
 ob_implicit_flush(false);
 
-if(count($aRoutePatterns[$sPattern]) > 0 && is_file($sSiteRoot.'app/controllers/'.$aRoutePatterns[$sPattern]['controller'].'.php')) {
-	$aRoutePattern = $aRoutePatterns[$sPattern];
-	$sController = $aRoutePattern['controller'];
-	$sAction = $aRoutePattern['action'];
+if(count($aRoutePatterns[$sPattern]) > 0) {
+	$routePattern = $aRoutePatterns[$sPattern];
+	
+	if(is_array($routePattern)) {
+		list($sController, $sAction) = explode('/', $routePattern['route']);
+	} else {
+		list($sController, $sAction) = explode('/', $routePattern);
+	}
 	
 	include($sSiteRoot.'app/controllers/'.$sController.'.php');
 	
@@ -156,9 +160,9 @@ if(count($aRoutePatterns[$sPattern]) > 0 && is_file($sSiteRoot.'app/controllers/
 				}
 			}
 			
-			if(is_array($aRoutePattern['param'])) {
+			if(is_array($routePattern) && array_key_exists('param', $routePattern)) {
 				// Combine dynamic and manual url variables to be loaded into the Controller
-				$aURLVars = array_merge($urlParams, $aRoutePattern['param']);
+				$aURLVars = array_merge($urlParams, $routePattern['param']);
 			} else {
 				$aURLVars = $urlParams;
 			}
