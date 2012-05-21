@@ -192,5 +192,6 @@ if(count($aRoutePatterns[$sPattern]) > 0) {
 	$oApp->error->send('Page not found.', '404');
 }
 
-echo ob_get_contents();
+$sWebpage = ob_get_contents();
 ob_end_clean();
+echo $sWebpage;
