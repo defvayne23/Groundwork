@@ -5,7 +5,7 @@ class Load extends GW {
 			if(is_file($this->root.'app/controllers/'.$sController.'.php')) {
 				include($this->root.'app/controllers/'.$sController.'.php');
 				
-				if(class_exists($sController.'_model')) {
+				if(class_exists($sController)) {
 					$oController = new $sController;
 				} else {
 					$aTrace = debug_backtrace();
