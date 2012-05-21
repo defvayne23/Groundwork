@@ -1,6 +1,6 @@
 <?php
 class Load extends GW {
-	public function controller($sController) {
+	public function controller($sController, $sTriggerError = true) {
 		if(!class_exists($sController)) {
 			if(is_file($this->root.'app/controllers/'.$sController.'.php')) {
 				include($this->root.'app/controllers/'.$sController.'.php');
@@ -8,12 +8,20 @@ class Load extends GW {
 				if(class_exists($sController)) {
 					$oController = new $sController;
 				} else {
-					$aTrace = debug_backtrace();
-					$this->error->trigger('Could not load controller \''.$sController.'\'. Failed to find class.', 'ERROR', $aTrace[0]);
+					if($sTriggerError == true) {
+						$aTrace = debug_backtrace();
+						$this->error->trigger('Could not load controller \''.$sController.'\'. Failed to find class.', 'ERROR', $aTrace[0]);
+					} else {
+						return false;
+					}
 				}
-			} else {	
+			} else {
+				if($sTriggerError == true) {	
 					$aTrace = debug_backtrace();
 					$this->error->trigger('Could not load controller \''.$sController.'\'. File not found. ('.$this->root.'app/controllers/'.$sController.'.php)', 'ERROR', $aTrace[0]);
+				} else {
+					return false;
+				}
 			}
 		} else {
 			$oController = new $sController;

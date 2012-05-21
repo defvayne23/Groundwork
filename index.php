@@ -144,10 +144,10 @@ if(count($aRoutePatterns[$sPattern]) > 0) {
 		list($sController, $sAction) = explode('/', $routePattern);
 	}
 	
-	include($sSiteRoot.'app/controllers/'.$sController.'.php');
+	$oController = $oLoad->controller($sController, false);
 	
-	if(class_exists($sController)) {
-		if(method_exists($sController, $sAction)) {
+	if($oController != false) {
+		if(method_exists($oController, $sAction)) {
 			// Pull dynamic variables from url
 			$sPatternRGXP = preg_replace('/<([a-z]+):(.+?)>/i', '(?P<$1>$2)', $sPattern);
 			preg_match('/'.str_replace('/', '\/', $sPatternRGXP).'/i', $sURL, $aParamMatches);
@@ -167,7 +167,6 @@ if(count($aRoutePatterns[$sPattern]) > 0) {
 				$aURLVars = $urlParams;
 			}
 			
-			$oController = $oApp->load->controller($sController);
 			$oController->$sAction();
 		} else {
 			$oApp->error->send('Page not found.', '404');
@@ -176,11 +175,10 @@ if(count($aRoutePatterns[$sPattern]) > 0) {
 		$oApp->error->send('Page not found.', '404');
 	}
 } elseif(is_file($sSiteRoot.'app/controllers/'.$sController.'.php')) {
-	include($sSiteRoot.'app/controllers/'.$sController.'.php');
+	$oController = $oLoad->controller($sController, false);
 	
-	if(class_exists($sController)) {
-		if(method_exists($sController, $sAction)) {
-			$oController = new $sController($sController, $aURL);
+	if($oController != false) {
+		if(method_exists($oController, $sAction)) {
 			call_user_func_array(array($oController, $sAction), array_slice($aURL, 2));
 		} else {
 			$oApp->error->send('Page not found.', '404');
